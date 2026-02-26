@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
 import "./globals.css";
+import ConsoleMessage from "@/components/ConsoleMessage";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -13,7 +14,7 @@ export const metadata: Metadata = {
     "Todo app modern dengan pelacak deadline otomatis dan autentikasi Google.",
   keywords: ["ToDo", "Catatan", "Notes", "Rengsekeun"],
   icons: {
-    icon: "/icon.png", // favicon utamanerate icons
+    icon: "/icon.png",
   },
   openGraph: {
     title: "TaskFlow — Smart Todo App",
@@ -30,7 +31,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="id" className="dark">
-      <body className={`${geist.variable} antialiased`}>{children}</body>
+      <body className={`${geist.variable} antialiased`}>
+        <ConsoleMessage />
+        {children}
+      </body>
     </html>
   );
 }
