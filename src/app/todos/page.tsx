@@ -1,7 +1,7 @@
-import { redirect } from 'next/navigation';
-import { createClient } from '@/lib/supabase/server';
-import Navbar from '@/components/Navbar';
-import TodosClient from '@/components/TodosClient';
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+import TodosClient from "@/components/TodosClient";
+import Navbar from "@/components/fragments/Navbar";
 
 export default async function TodosPage() {
   const supabase = await createClient();
@@ -11,7 +11,7 @@ export default async function TodosPage() {
 
   // Middleware seharusnya sudah redirect, ini double-check
   if (!user) {
-    redirect('/auth/login');
+    redirect("/auth/login");
   }
 
   return (

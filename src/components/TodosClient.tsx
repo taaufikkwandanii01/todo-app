@@ -1,30 +1,25 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useCallback, useRef } from 'react';
-import {
-  getTodos,
-  createTodo,
-  updateTodo,
-  deleteTodo,
-} from '@/lib/todos';
-import TodoCard from '@/components/TodoCard';
-import TodoForm from '@/components/TodoForm';
-import DeleteModal from '@/components/DeleteModal';
-import { Plus, Search, Loader2 } from 'lucide-react';
-import type { Todo, TodoStatus } from '@/types/todo';
-import type { User } from '@supabase/supabase-js';
+import { useState, useEffect, useCallback, useRef } from "react";
+import { getTodos, createTodo, updateTodo, deleteTodo } from "@/lib/todos";
+import TodoCard from "@/components/TodoCard";
+import TodoForm from "@/components/TodoForm";
+import DeleteModal from "@/components/DeleteModal";
+import { Plus, Search, Loader2 } from "lucide-react";
+import type { Todo, TodoStatus } from "@/types/todo";
+import type { User } from "@supabase/supabase-js";
 
 interface TodosClientProps {
   user: User;
 }
 
-type FilterTab = 'Semua' | 'Pending' | 'Completed' | 'Failed';
+type FilterTab = "Semua" | "Pending" | "Completed" | "Failed";
 
 export default function TodosClient({ user }: TodosClientProps) {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
-  const [activeFilter, setActiveFilter] = useState<FilterTab>('Semua');
+  const [search, setSearch] = useState("");
+  const [activeFilter, setActiveFilter] = useState<FilterTab>("Semua");
   const [showForm, setShowForm] = useState(false);
   const [editTodo, setEditTodo] = useState<Todo | null>(null);
   const [deletingTodo, setDeletingTodo] = useState<Todo | null>(null);
@@ -37,12 +32,12 @@ export default function TodosClient({ user }: TodosClientProps) {
         const data = await getTodos(user.id, searchTerm);
         setTodos(data);
       } catch (e) {
-        console.error('Gagal fetch todos:', e);
+        console.error("Gagal fetch todos:", e);
       } finally {
         setLoading(false);
       }
     },
-    [user.id]
+    [user.id],
   );
 
   // Initial fetch
@@ -94,9 +89,7 @@ export default function TodosClient({ user }: TodosClientProps) {
       deadline: data.deadline,
       status: data.status,
     });
-    setTodos((prev) =>
-      prev.map((t) => (t.id === updated.id ? updated : t))
-    );
+    setTodos((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
   }
 
   async function handleDelete() {
@@ -107,39 +100,37 @@ export default function TodosClient({ user }: TodosClientProps) {
 
   async function handleToggleComplete(todo: Todo) {
     const newStatus: TodoStatus =
-      todo.status === 'Completed' ? 'Pending' : 'Completed';
+      todo.status === "Completed" ? "Pending" : "Completed";
     try {
       const updated = await updateTodo(todo.id, user.id, {
         status: newStatus,
       });
-      setTodos((prev) =>
-        prev.map((t) => (t.id === updated.id ? updated : t))
-      );
+      setTodos((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
     } catch (e) {
-      console.error('Toggle gagal:', e);
+      console.error("Toggle gagal:", e);
     }
   }
 
   // ─── Filter ────────────────────────────────────────────
   const filtered =
-    activeFilter === 'Semua'
+    activeFilter === "Semua"
       ? todos
       : todos.filter((t) => t.status === activeFilter);
 
   const counts = {
     Semua: todos.length,
-    Pending: todos.filter((t) => t.status === 'Pending').length,
-    Completed: todos.filter((t) => t.status === 'Completed').length,
-    Failed: todos.filter((t) => t.status === 'Failed').length,
+    Pending: todos.filter((t) => t.status === "Pending").length,
+    Completed: todos.filter((t) => t.status === "Completed").length,
+    Failed: todos.filter((t) => t.status === "Failed").length,
   };
 
-  const TABS: FilterTab[] = ['Semua', 'Pending', 'Completed', 'Failed'];
+  const TABS: FilterTab[] = ["Semua", "Pending", "Completed", "Failed"];
 
   const TAB_COLORS: Record<FilterTab, string> = {
-    Semua: 'text-white border-white/30',
-    Pending: 'text-amber-400 border-amber-400/50',
-    Completed: 'text-emerald-400 border-emerald-400/50',
-    Failed: 'text-red-400 border-red-400/50',
+    Semua: "text-white border-white/30",
+    Pending: "text-amber-400 border-amber-400/50",
+    Completed: "text-emerald-400 border-emerald-400/50",
+    Failed: "text-red-400 border-red-400/50",
   };
 
   // ─── Render ────────────────────────────────────────────
@@ -148,7 +139,7 @@ export default function TodosClient({ user }: TodosClientProps) {
       {/* Header */}
       <div className="mb-6">
         <h1 className="text-2xl font-extrabold tracking-tight text-white/90 mb-0.5">
-          Todo Saya
+          ToDo Saya
         </h1>
         <p className="text-sm text-white/30">
           Kelola dan pantau semua tugas Anda
@@ -191,14 +182,14 @@ export default function TodosClient({ user }: TodosClientProps) {
               ${
                 activeFilter === tab
                   ? `${TAB_COLORS[tab]} border-b-2 -mb-px`
-                  : 'text-white/30 hover:text-white/60 border-b-2 border-transparent -mb-px'
+                  : "text-white/30 hover:text-white/60 border-b-2 border-transparent -mb-px"
               }
             `}
           >
             {tab}
             <span
               className={`ml-1.5 px-1.5 py-0.5 rounded-full text-[10px] ${
-                activeFilter === tab ? 'bg-white/10' : 'bg-white/5'
+                activeFilter === tab ? "bg-white/10" : "bg-white/5"
               }`}
             >
               {counts[tab]}
@@ -216,16 +207,16 @@ export default function TodosClient({ user }: TodosClientProps) {
       ) : filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 gap-3">
           <div className="text-4xl opacity-20">
-            {search ? '🔍' : activeFilter === 'Semua' ? '✅' : '📋'}
+            {search ? "🔍" : activeFilter === "Semua" ? "✅" : "📋"}
           </div>
           <p className="text-sm text-white/30 text-center">
             {search
               ? `Tidak ada hasil untuk "${search}"`
-              : activeFilter === 'Semua'
-              ? 'Belum ada todo. Buat satu sekarang!'
-              : `Tidak ada todo dengan status ${activeFilter}.`}
+              : activeFilter === "Semua"
+                ? "Belum ada todo. Buat satu sekarang!"
+                : `Tidak ada todo dengan status ${activeFilter}.`}
           </p>
-          {!search && activeFilter === 'Semua' && (
+          {!search && activeFilter === "Semua" && (
             <button
               onClick={() => setShowForm(true)}
               className="mt-2 px-4 py-2 rounded-lg text-sm text-violet-400 border border-violet-500/30 hover:bg-violet-500/10 transition-all cursor-pointer"
@@ -250,10 +241,7 @@ export default function TodosClient({ user }: TodosClientProps) {
 
       {/* Modals */}
       {showForm && (
-        <TodoForm
-          onSave={handleCreate}
-          onClose={() => setShowForm(false)}
-        />
+        <TodoForm onSave={handleCreate} onClose={() => setShowForm(false)} />
       )}
 
       {editTodo && (
