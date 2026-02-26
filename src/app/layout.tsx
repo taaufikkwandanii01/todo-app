@@ -1,16 +1,26 @@
-import type { Metadata } from 'next';
-import { Geist } from 'next/font/google';
-import './globals.css';
+import type { Metadata } from "next";
+import { Geist } from "next/font/google";
+import "./globals.css";
 
 const geist = Geist({
-  subsets: ['latin'],
-  variable: '--font-geist',
+  subsets: ["latin"],
+  variable: "--font-geist",
 });
 
 export const metadata: Metadata = {
-  title: 'TaskFlow — Smart Todo App',
+  title: "TaskFlow — Smart Todo App",
   description:
-    'Todo app modern dengan pelacak deadline otomatis dan autentikasi Google.',
+    "Todo app modern dengan pelacak deadline otomatis dan autentikasi Google.",
+  keywords: ["ToDo", "Catatan", "Notes", "Rengsekeun"],
+  icons: {
+    icon: "/icon.png", // favicon utamanerate icons
+  },
+  openGraph: {
+    title: "TaskFlow — Smart Todo App",
+    description:
+      "Todo app modern dengan pelacak deadline otomatis dan autentikasi Google.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
