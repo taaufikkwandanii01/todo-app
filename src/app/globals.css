@@ -101,3 +101,12 @@ select.form-input option {
 .zoom-in-95 {
   animation-name: zoom-in-95, fade-in;
 }
+
+/* ── Hide scrollbar tapi tetap bisa scroll (untuk tab overflow) ── */
+.scrollbar-none {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-none::-webkit-scrollbar {
+  display: none;
+}
