@@ -178,7 +178,7 @@ export default function TodoForm({ todo, onSave, onClose }: TodoFormProps) {
               ? "Menyimpan..."
               : isEdit
                 ? "Simpan Perubahan"
-                : "Buat Todo"}
+                : "Buat ToDo"}
           </button>
         </div>
       </div>

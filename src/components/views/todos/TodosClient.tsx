@@ -555,7 +555,7 @@ export default function TodosClient({ user }: TodosClientProps) {
                 onClick={() => setShowForm(true)}
                 className="mt-1 px-4 py-2 rounded-lg text-xs text-violet-400 border border-violet-500/30 hover:bg-violet-500/10 transition-all cursor-pointer"
               >
-                + Buat ToDO Pertama
+                + Buat ToDO
               </button>
             )}
         </div>

@@ -21,7 +21,7 @@ export default function Navbar({ user }: NavbarProps) {
   }
 
   return (
-    <nav className="sticky top-0 z-40 flex items-center justify-between px-4 md:px-6 h-[60px] bg-[#0d0d14]/90 backdrop-blur-md border-b border-white/[0.06]">
+    <nav className="sticky top-0 z-40 flex items-center justify-between px-2 md:px-6 h-[60px] bg-[#0d0d14]/90 backdrop-blur-md border-b border-white/[0.06]">
       {/* Brand */}
       <div className="flex items-center gap-2.5 select-none">
         <div className="w-7 h-7 rounded-lg bg-gradient-to-br from-violet-500 to-violet-400 flex items-center justify-center text-xs font-bold text-white shadow-md shadow-violet-500/20">
