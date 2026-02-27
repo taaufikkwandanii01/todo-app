@@ -527,7 +527,6 @@ export default function TodosClient({ user }: TodosClientProps) {
       {loading ? (
         <div className="flex flex-col items-center justify-center py-24 gap-3">
           <Loader2 size={26} className="text-violet-400 animate-spin" />
-          <p className="text-sm text-white/25">Memuat todos…</p>
         </div>
       ) : filtered.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-24 gap-3 text-center">
