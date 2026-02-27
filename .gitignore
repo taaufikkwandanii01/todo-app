@@ -33,7 +33,9 @@ yarn-error.log*
 # env files (can opt-in for committing if needed)
 .env*
 
-.SETUP.md
+# tambahan file yang tidak perlu di-commit
+SETUP.md
+supabase-schema.sql
 
 # vercel
 .vercel
