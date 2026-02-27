@@ -37,7 +37,7 @@ export default function DeleteModal({
         <div className="flex items-center justify-between mb-5">
           <div className="flex items-center gap-2 text-red-400">
             <Trash2 size={16} />
-            <h2 className="text-base font-bold">Hapus Todo</h2>
+            <h2 className="text-base font-bold">Hapus ToDo</h2>
           </div>
           <button
             onClick={onClose}
@@ -48,11 +48,10 @@ export default function DeleteModal({
         </div>
 
         <p className="text-sm text-white/50 leading-relaxed">
-          Apakah Anda yakin ingin menghapus{' '}
+          Apakah Anda yakin ingin menghapus tugas{' '}
           <span className="text-white/80 font-semibold">
             &ldquo;{todo.title}&rdquo;
           </span>
-          ? Tindakan ini tidak dapat dibatalkan.
         </p>
 
         <div className="flex gap-2 justify-end mt-6">

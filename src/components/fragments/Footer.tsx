@@ -9,7 +9,7 @@ export default function Footer() {
           <div className="w-6 h-6 rounded-lg bg-gradient-to-tr from-violet-600 to-indigo-500 flex items-center justify-center shadow-lg shadow-violet-500/10">
             <span className="text-[10px] text-white">✦</span>
           </div>
-          <span className="text-sm font-bold text-white/50 tracking-wider uppercase">
+          <span className="text-sm font-bold text-white/50 tracking-wider">
             TaskFlow
           </span>
         </div>

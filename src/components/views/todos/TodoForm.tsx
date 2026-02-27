@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useEffect, useRef } from 'react';
-import { X } from 'lucide-react';
-import type { Todo, TodoStatus } from '@/types/todo';
+import { useState, useEffect, useRef } from "react";
+import { X } from "lucide-react";
+import type { Todo, TodoStatus } from "@/types/todo";
 
 interface TodoFormProps {
   todo?: Todo | null;
@@ -18,18 +18,18 @@ interface TodoFormProps {
 /** Konversi ISO string → value untuk input datetime-local */
 function toDatetimeLocal(iso: string): string {
   const d = new Date(iso);
-  const pad = (n: number) => String(n).padStart(2, '0');
+  const pad = (n: number) => String(n).padStart(2, "0");
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(
-    d.getDate()
+    d.getDate(),
   )}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
 /** Nilai minimum datetime-local: sekarang + 1 menit */
 function getMinDatetime(): string {
   const d = new Date(Date.now() + 60_000);
-  const pad = (n: number) => String(n).padStart(2, '0');
+  const pad = (n: number) => String(n).padStart(2, "0");
   return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(
-    d.getDate()
+    d.getDate(),
   )}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
 }
 
@@ -37,36 +37,36 @@ export default function TodoForm({ todo, onSave, onClose }: TodoFormProps) {
   const isEdit = !!todo;
   const firstInputRef = useRef<HTMLInputElement>(null);
 
-  const [title, setTitle] = useState(todo?.title ?? '');
-  const [description, setDescription] = useState(todo?.description ?? '');
+  const [title, setTitle] = useState(todo?.title ?? "");
+  const [description, setDescription] = useState(todo?.description ?? "");
   const [deadline, setDeadline] = useState(
-    todo ? toDatetimeLocal(todo.deadline) : ''
+    todo ? toDatetimeLocal(todo.deadline) : "",
   );
-  const [status, setStatus] = useState<TodoStatus>(todo?.status ?? 'Pending');
-  const [error, setError] = useState('');
+  const [status, setStatus] = useState<TodoStatus>(todo?.status ?? "Pending");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
   // Auto focus & Escape handler
   useEffect(() => {
     firstInputRef.current?.focus();
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onClose();
+      if (e.key === "Escape") onClose();
     };
-    window.addEventListener('keydown', onKey);
-    return () => window.removeEventListener('keydown', onKey);
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
   }, [onClose]);
 
   async function handleSubmit() {
-    setError('');
+    setError("");
 
-    if (!title.trim()) return setError('Judul tidak boleh kosong.');
-    if (!deadline) return setError('Deadline harus diisi.');
+    if (!title.trim()) return setError("Judul tidak boleh kosong.");
+    if (!deadline) return setError("Deadline harus diisi.");
 
     const deadlineISO = new Date(deadline).toISOString();
 
     // Validasi: deadline harus masa depan untuk todo baru
     if (!isEdit && new Date(deadlineISO) <= new Date()) {
-      return setError('Deadline harus di masa mendatang.');
+      return setError("Deadline harus di masa mendatang.");
     }
 
     setLoading(true);
@@ -79,7 +79,7 @@ export default function TodoForm({ todo, onSave, onClose }: TodoFormProps) {
       });
       onClose();
     } catch (e: unknown) {
-      setError((e as Error).message ?? 'Terjadi kesalahan.');
+      setError((e as Error).message ?? "Terjadi kesalahan.");
     } finally {
       setLoading(false);
     }
@@ -94,7 +94,7 @@ export default function TodoForm({ todo, onSave, onClose }: TodoFormProps) {
         {/* Header */}
         <div className="flex items-center justify-between mb-6">
           <h2 className="text-base font-bold text-white/90">
-            {isEdit ? 'Edit Todo' : 'Buat Todo Baru'}
+            {isEdit ? "Edit ToDO" : "Buat ToDo Baru"}
           </h2>
           <button
             onClick={onClose}
@@ -174,7 +174,11 @@ export default function TodoForm({ todo, onSave, onClose }: TodoFormProps) {
             disabled={loading}
             className="px-5 py-2 rounded-lg text-sm font-medium bg-violet-600 hover:bg-violet-500 text-white transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-violet-600/20 cursor-pointer"
           >
-            {loading ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : 'Buat Todo'}
+            {loading
+              ? "Menyimpan..."
+              : isEdit
+                ? "Simpan Perubahan"
+                : "Buat Todo"}
           </button>
         </div>
       </div>
