@@ -538,7 +538,7 @@ export default function TodosClient({ user }: TodosClientProps) {
                 ? "⚠️"
                 : filters.status !== "Semua"
                   ? "📋"
-                  : "✅"}
+                  : " "}
           </div>
           <p className="text-sm text-white/25 max-w-xs">
             {search
@@ -547,7 +547,7 @@ export default function TodosClient({ user }: TodosClientProps) {
                 ? "Tidak ada todo pada rentang deadline ini."
                 : filters.status !== "Semua"
                   ? `Tidak ada todo dengan status ${filters.status}.`
-                  : "Belum ada todo. Yuk buat satu sekarang!"}
+                  : " "}
           </p>
           {!search &&
             filters.status === "Semua" &&
