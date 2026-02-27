@@ -1,9 +1,9 @@
-'use client';
+"use client";
 
-import { computeLiveStatus, formatDeadline } from '@/lib/todos';
-import Countdown from '@/components/Countdown';
-import type { Todo } from '@/types/todo';
-import { Pencil, Trash2, CheckCircle2, Circle } from 'lucide-react';
+import { computeLiveStatus, formatDeadline } from "@/lib/todos";
+import Countdown from "@/components/views/todos/Countdown";
+import type { Todo } from "@/types/todo";
+import { Pencil, Trash2, CheckCircle2, Circle } from "lucide-react";
 
 interface TodoCardProps {
   todo: Todo;
@@ -14,22 +14,22 @@ interface TodoCardProps {
 
 const STATUS_CONFIG = {
   Pending: {
-    badge: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
-    bar: 'bg-violet-500',
-    label: 'Pending',
-    dot: 'bg-amber-400',
+    badge: "bg-amber-500/10 text-amber-400 border-amber-500/20",
+    bar: "bg-violet-500",
+    label: "Pending",
+    dot: "bg-amber-400",
   },
   Completed: {
-    badge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
-    bar: 'bg-emerald-500',
-    label: 'Selesai',
-    dot: 'bg-emerald-400',
+    badge: "bg-emerald-500/10 text-emerald-400 border-emerald-500/20",
+    bar: "bg-emerald-500",
+    label: "Selesai",
+    dot: "bg-emerald-400",
   },
   Failed: {
-    badge: 'bg-red-500/10 text-red-400 border-red-500/20',
-    bar: 'bg-red-500',
-    label: 'Gagal / Expired',
-    dot: 'bg-red-400',
+    badge: "bg-red-500/10 text-red-400 border-red-500/20",
+    bar: "bg-red-500",
+    label: "Gagal / Expired",
+    dot: "bg-red-400",
   },
 };
 
@@ -41,17 +41,17 @@ export default function TodoCard({
 }: TodoCardProps) {
   const liveStatus = computeLiveStatus(todo);
   const cfg = STATUS_CONFIG[liveStatus];
-  const isCompleted = liveStatus === 'Completed';
-  const isFailed = liveStatus === 'Failed';
+  const isCompleted = liveStatus === "Completed";
+  const isFailed = liveStatus === "Failed";
 
   return (
     <div
       className={`
         relative group rounded-xl border bg-[#111118] transition-all duration-200
         hover:shadow-lg hover:shadow-black/40
-        ${isFailed ? 'border-red-500/20 bg-gradient-to-br from-[#111118] to-red-950/10' : ''}
-        ${isCompleted ? 'border-emerald-500/15 opacity-70' : ''}
-        ${!isCompleted && !isFailed ? 'border-white/[0.07]' : ''}
+        ${isFailed ? "border-red-500/20 bg-gradient-to-br from-[#111118] to-red-950/10" : ""}
+        ${isCompleted ? "border-emerald-500/15 opacity-70" : ""}
+        ${!isCompleted && !isFailed ? "border-white/[0.07]" : ""}
       `}
     >
       {/* Left accent bar */}
@@ -67,7 +67,7 @@ export default function TodoCard({
             onClick={() => onToggleComplete(todo)}
             disabled={isFailed}
             className="mt-0.5 flex-shrink-0 text-white/20 hover:text-emerald-400 disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
-            aria-label={isCompleted ? 'Tandai belum selesai' : 'Tandai selesai'}
+            aria-label={isCompleted ? "Tandai belum selesai" : "Tandai selesai"}
           >
             {isCompleted ? (
               <CheckCircle2 size={20} className="text-emerald-400" />
@@ -81,10 +81,10 @@ export default function TodoCard({
             <p
               className={`text-sm font-semibold leading-snug break-words ${
                 isCompleted
-                  ? 'line-through text-white/30'
+                  ? "line-through text-white/30"
                   : isFailed
-                  ? 'text-red-300/70'
-                  : 'text-white/90'
+                    ? "text-red-300/70"
+                    : "text-white/90"
               }`}
             >
               {todo.title}

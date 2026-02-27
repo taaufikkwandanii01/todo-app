@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import MainLayout from "@/components/layouts/MainLayout";
-import TodosClient from "@/components/TodosClient";
+import TodosClient from "@/components/views/todos/TodosClient";
 
 export default async function TodosPage() {
   const supabase = await createClient();

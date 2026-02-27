@@ -2,9 +2,9 @@
 
 import { useState, useEffect, useCallback, useRef } from "react";
 import { getTodos, createTodo, updateTodo, deleteTodo } from "@/lib/todos";
-import TodoCard from "@/components/TodoCard";
-import TodoForm from "@/components/TodoForm";
-import DeleteModal from "@/components/DeleteModal";
+import TodoCard from "@/components/views/todos/TodoCard";
+import TodoForm from "@/components/views/todos/TodoForm";
+import DeleteModal from "@/components/views/todos/DeleteModal";
 import {
   Plus,
   Search,
@@ -28,7 +28,12 @@ interface TodosClientProps {
 // ── Types ──────────────────────────────────────────────────────────────────
 type FilterStatus = "Semua" | TodoStatus;
 type SortBy = "newest" | "oldest" | "deadline_asc" | "deadline_desc";
-type DeadlineRange = "semua" | "hari_ini" | "minggu_ini" | "bulan_ini" | "terlewat";
+type DeadlineRange =
+  | "semua"
+  | "hari_ini"
+  | "minggu_ini"
+  | "bulan_ini"
+  | "terlewat";
 
 interface FilterState {
   status: FilterStatus;
@@ -68,7 +73,7 @@ function isThisMonth(date: Date) {
 function applyFiltersAndSort(
   todos: Todo[],
   filters: FilterState,
-  search: string
+  search: string,
 ): Todo[] {
   let result = [...todos];
 
@@ -78,7 +83,7 @@ function applyFiltersAndSort(
     result = result.filter(
       (t) =>
         t.title.toLowerCase().includes(q) ||
-        t.description?.toLowerCase().includes(q)
+        t.description?.toLowerCase().includes(q),
     );
   }
 
@@ -92,11 +97,16 @@ function applyFiltersAndSort(
     result = result.filter((t) => {
       const dl = new Date(t.deadline);
       switch (filters.deadlineRange) {
-        case "hari_ini":   return isToday(dl);
-        case "minggu_ini": return isThisWeek(dl);
-        case "bulan_ini":  return isThisMonth(dl);
-        case "terlewat":   return dl < new Date() && t.status === "Pending";
-        default: return true;
+        case "hari_ini":
+          return isToday(dl);
+        case "minggu_ini":
+          return isThisWeek(dl);
+        case "bulan_ini":
+          return isThisMonth(dl);
+        case "terlewat":
+          return dl < new Date() && t.status === "Pending";
+        default:
+          return true;
       }
     });
   }
@@ -105,9 +115,13 @@ function applyFiltersAndSort(
   result.sort((a, b) => {
     switch (filters.sortBy) {
       case "newest":
-        return new Date(b.created_at).getTime() - new Date(a.created_at).getTime();
+        return (
+          new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
+        );
       case "oldest":
-        return new Date(a.created_at).getTime() - new Date(b.created_at).getTime();
+        return (
+          new Date(a.created_at).getTime() - new Date(b.created_at).getTime()
+        );
       case "deadline_asc":
         return new Date(a.deadline).getTime() - new Date(b.deadline).getTime();
       case "deadline_desc":
@@ -122,11 +136,41 @@ function applyFiltersAndSort(
 
 // ── Sub-components ──────────────────────────────────────────────────────────
 
-const STATUS_TABS: { value: FilterStatus; label: string; icon: React.ReactNode; color: string; activeColor: string }[] = [
-  { value: "Semua",     label: "Semua",     icon: <LayoutList size={12} />,    color: "text-white/40",   activeColor: "text-white border-white/40" },
-  { value: "Pending",   label: "Pending",   icon: <Clock size={12} />,         color: "text-amber-400/60", activeColor: "text-amber-400 border-amber-400/60" },
-  { value: "Completed", label: "Selesai",   icon: <CheckCircle2 size={12} />,  color: "text-emerald-400/60", activeColor: "text-emerald-400 border-emerald-400/60" },
-  { value: "Failed",    label: "Gagal",     icon: <XCircle size={12} />,       color: "text-red-400/60",  activeColor: "text-red-400 border-red-400/60" },
+const STATUS_TABS: {
+  value: FilterStatus;
+  label: string;
+  icon: React.ReactNode;
+  color: string;
+  activeColor: string;
+}[] = [
+  {
+    value: "Semua",
+    label: "Semua",
+    icon: <LayoutList size={12} />,
+    color: "text-white/40",
+    activeColor: "text-white border-white/40",
+  },
+  {
+    value: "Pending",
+    label: "Pending",
+    icon: <Clock size={12} />,
+    color: "text-amber-400/60",
+    activeColor: "text-amber-400 border-amber-400/60",
+  },
+  {
+    value: "Completed",
+    label: "Selesai",
+    icon: <CheckCircle2 size={12} />,
+    color: "text-emerald-400/60",
+    activeColor: "text-emerald-400 border-emerald-400/60",
+  },
+  {
+    value: "Failed",
+    label: "Gagal",
+    icon: <XCircle size={12} />,
+    color: "text-red-400/60",
+    activeColor: "text-red-400 border-red-400/60",
+  },
 ];
 
 interface FilterPanelProps {
@@ -136,7 +180,12 @@ interface FilterPanelProps {
   activeCount: number;
 }
 
-function FilterPanel({ filters, onChange, onClose, activeCount }: FilterPanelProps) {
+function FilterPanel({
+  filters,
+  onChange,
+  onClose,
+  activeCount,
+}: FilterPanelProps) {
   const set = <K extends keyof FilterState>(key: K, val: FilterState[K]) =>
     onChange({ ...filters, [key]: val });
 
@@ -150,7 +199,9 @@ function FilterPanel({ filters, onChange, onClose, activeCount }: FilterPanelPro
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <SlidersHorizontal size={13} className="text-violet-400" />
-          <span className="text-xs font-semibold text-white/70">Filter & Urutkan</span>
+          <span className="text-xs font-semibold text-white/70">
+            Filter & Urutkan
+          </span>
           {activeCount > 0 && (
             <span className="px-1.5 py-0.5 rounded-full bg-violet-500/20 text-violet-300 text-[10px] font-semibold">
               {activeCount} aktif
@@ -182,10 +233,10 @@ function FilterPanel({ filters, onChange, onClose, activeCount }: FilterPanelPro
         </p>
         <div className="grid grid-cols-2 gap-1.5">
           {[
-            { value: "newest",       label: "Terbaru dibuat" },
-            { value: "oldest",       label: "Terlama dibuat" },
+            { value: "newest", label: "Terbaru dibuat" },
+            { value: "oldest", label: "Terlama dibuat" },
             { value: "deadline_asc", label: "Deadline terdekat" },
-            { value: "deadline_desc",label: "Deadline terjauh" },
+            { value: "deadline_desc", label: "Deadline terjauh" },
           ].map((opt) => (
             <button
               key={opt.value}
@@ -209,11 +260,11 @@ function FilterPanel({ filters, onChange, onClose, activeCount }: FilterPanelPro
         </p>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-1.5">
           {[
-            { value: "semua",     label: "Semua" },
-            { value: "hari_ini",  label: "Hari ini" },
-            { value: "minggu_ini",label: "Minggu ini" },
+            { value: "semua", label: "Semua" },
+            { value: "hari_ini", label: "Hari ini" },
+            { value: "minggu_ini", label: "Minggu ini" },
             { value: "bulan_ini", label: "Bulan ini" },
-            { value: "terlewat",  label: "⚠ Terlewat" },
+            { value: "terlewat", label: "⚠ Terlewat" },
           ].map((opt) => (
             <button
               key={opt.value}
@@ -263,13 +314,17 @@ export default function TodosClient({ user }: TodosClientProps) {
     }
   }, [user.id]);
 
-  useEffect(() => { fetchTodos(); }, [fetchTodos]);
+  useEffect(() => {
+    fetchTodos();
+  }, [fetchTodos]);
 
   // Debounced search — hanya re-fetch jika search berubah
   useEffect(() => {
     if (debounceRef.current) clearTimeout(debounceRef.current);
     debounceRef.current = setTimeout(() => fetchTodos(), 400);
-    return () => { if (debounceRef.current) clearTimeout(debounceRef.current); };
+    return () => {
+      if (debounceRef.current) clearTimeout(debounceRef.current);
+    };
   }, [search, fetchTodos]);
 
   // Auto-refresh setiap 30 detik
@@ -279,12 +334,21 @@ export default function TodosClient({ user }: TodosClientProps) {
   }, [fetchTodos]);
 
   // ── CRUD ────────────────────────────────────────────────
-  async function handleCreate(data: { title: string; description: string; deadline: string }) {
+  async function handleCreate(data: {
+    title: string;
+    description: string;
+    deadline: string;
+  }) {
     const newTodo = await createTodo(user.id, data);
     setTodos((prev) => [newTodo, ...prev]);
   }
 
-  async function handleUpdate(data: { title: string; description: string; deadline: string; status?: TodoStatus }) {
+  async function handleUpdate(data: {
+    title: string;
+    description: string;
+    deadline: string;
+    status?: TodoStatus;
+  }) {
     if (!editTodo) return;
     const updated = await updateTodo(editTodo.id, user.id, data);
     setTodos((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
@@ -297,7 +361,8 @@ export default function TodosClient({ user }: TodosClientProps) {
   }
 
   async function handleToggleComplete(todo: Todo) {
-    const newStatus: TodoStatus = todo.status === "Completed" ? "Pending" : "Completed";
+    const newStatus: TodoStatus =
+      todo.status === "Completed" ? "Pending" : "Completed";
     try {
       const updated = await updateTodo(todo.id, user.id, { status: newStatus });
       setTodos((prev) => prev.map((t) => (t.id === updated.id ? updated : t)));
@@ -310,10 +375,10 @@ export default function TodosClient({ user }: TodosClientProps) {
   const filtered = applyFiltersAndSort(todos, filters, search);
 
   const counts: Record<FilterStatus, number> = {
-    Semua:     todos.length,
-    Pending:   todos.filter((t) => t.status === "Pending").length,
+    Semua: todos.length,
+    Pending: todos.filter((t) => t.status === "Pending").length,
     Completed: todos.filter((t) => t.status === "Completed").length,
-    Failed:    todos.filter((t) => t.status === "Failed").length,
+    Failed: todos.filter((t) => t.status === "Failed").length,
   };
 
   // Berapa banyak filter non-default yang aktif
@@ -434,14 +499,21 @@ export default function TodosClient({ user }: TodosClientProps) {
           <p className="text-[11px] text-white/30">
             {filtered.length} todo ditemukan
             {search && (
-              <span className="text-white/20"> untuk &ldquo;{search}&rdquo;</span>
+              <span className="text-white/20">
+                {" "}
+                untuk &ldquo;{search}&rdquo;
+              </span>
             )}
           </p>
           {(search || activeFilterCount > 0) && (
             <button
               onClick={() => {
                 setSearch("");
-                setFilters({ status: "Semua", sortBy: "newest", deadlineRange: "semua" });
+                setFilters({
+                  status: "Semua",
+                  sortBy: "newest",
+                  deadlineRange: "semua",
+                });
               }}
               className="text-[11px] text-violet-400/70 hover:text-violet-400 transition-colors cursor-pointer"
             >
@@ -463,28 +535,30 @@ export default function TodosClient({ user }: TodosClientProps) {
             {search
               ? "🔍"
               : filters.deadlineRange === "terlewat"
-              ? "⚠️"
-              : filters.status !== "Semua"
-              ? "📋"
-              : "✅"}
+                ? "⚠️"
+                : filters.status !== "Semua"
+                  ? "📋"
+                  : "✅"}
           </div>
           <p className="text-sm text-white/25 max-w-xs">
             {search
               ? `Tidak ada hasil untuk "${search}"`
               : filters.deadlineRange !== "semua"
-              ? "Tidak ada todo pada rentang deadline ini."
-              : filters.status !== "Semua"
-              ? `Tidak ada todo dengan status ${filters.status}.`
-              : "Belum ada todo. Yuk buat satu sekarang!"}
+                ? "Tidak ada todo pada rentang deadline ini."
+                : filters.status !== "Semua"
+                  ? `Tidak ada todo dengan status ${filters.status}.`
+                  : "Belum ada todo. Yuk buat satu sekarang!"}
           </p>
-          {!search && filters.status === "Semua" && filters.deadlineRange === "semua" && (
-            <button
-              onClick={() => setShowForm(true)}
-              className="mt-1 px-4 py-2 rounded-lg text-xs text-violet-400 border border-violet-500/30 hover:bg-violet-500/10 transition-all cursor-pointer"
-            >
-              + Buat Todo Pertama
-            </button>
-          )}
+          {!search &&
+            filters.status === "Semua" &&
+            filters.deadlineRange === "semua" && (
+              <button
+                onClick={() => setShowForm(true)}
+                className="mt-1 px-4 py-2 rounded-lg text-xs text-violet-400 border border-violet-500/30 hover:bg-violet-500/10 transition-all cursor-pointer"
+              >
+                + Buat Todo Pertama
+              </button>
+            )}
         </div>
       ) : (
         <div className="flex flex-col gap-2">
